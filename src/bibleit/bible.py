@@ -107,13 +107,13 @@ class Bible(metaclass=BibleMeta):
                     case [start]:
                         start, before = self._versePointer(start)
                         return self.chapter(book, int(chapter))[
-                            int(start) - (before + 1): int(start)
+                            int(start) - (before + 1) : int(start)
                         ]
                     case [start, end]:
                         start, before = self._versePointer(start)
                         end, after = self._versePointer(end)
                         return self.chapter(book, int(chapter))[
-                            int(start) - (before + 1): end + after
+                            int(start) - (before + 1) : end + after
                         ]
             case []:
                 return self.book(book)
