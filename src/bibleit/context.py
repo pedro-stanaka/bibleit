@@ -14,7 +14,7 @@ class Context:
 
     def __repr__(self):
         return f"{','.join(map(str,self.bible))}{config.context_ps1} "
-    
+
     @property
     def notes(self):
         return self._notes

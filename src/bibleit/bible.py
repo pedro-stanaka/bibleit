@@ -46,9 +46,7 @@ class Bible(metaclass=BibleMeta):
                 raise BibleNotFound(self.version)
             with target.open() as f:
                 self.content = list(
-                    enumerate(
-                        (line.strip(), normalize.normalize(line)) for line in f
-                    )
+                    enumerate((line.strip(), normalize.normalize(line)) for line in f)
                 )
             self.display = functools.reduce(
                 lambda f, g: lambda x: f(g(x)),
@@ -71,9 +69,10 @@ class Bible(metaclass=BibleMeta):
         return f"({self.version}) {value}" if _config.label else value
 
     def colored(self, value):
-        return (
-            "{}{}{}".format(self.color, value, _COLOR_END) if _config.color else value
-        )
+        if _config.color:
+            return "{}{}{}".format(self.color, value, _COLOR_END)
+        else:
+            return value
 
     def book(self, name):
         return [
@@ -108,13 +107,13 @@ class Bible(metaclass=BibleMeta):
                     case [start]:
                         start, before = self._versePointer(start)
                         return self.chapter(book, int(chapter))[
-                            int(start) - (before + 1) : int(start)
+                            int(start) - (before + 1): int(start)
                         ]
                     case [start, end]:
                         start, before = self._versePointer(start)
                         end, after = self._versePointer(end)
                         return self.chapter(book, int(chapter))[
-                            int(start) - (before + 1) : end + after
+                            int(start) - (before + 1): end + after
                         ]
             case []:
                 return self.book(book)
@@ -145,8 +144,7 @@ class Bible(metaclass=BibleMeta):
     def count(self, value):
         if target := value.lower():
             return sum(
-                normalized.count(target)
-                for _, normalized in self._filter(value)
+                normalized.count(target) for _, normalized in self._filter(value)
             )
         return 0
 
