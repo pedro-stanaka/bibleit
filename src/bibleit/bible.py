@@ -17,6 +17,8 @@ _VERSE_CONTINUATION_DEFAULT = f"1{_VERSE_CONTINUATION_DELIMITER}"
 _VERSE_POINTER_DELIMITER = "^"
 _SEARCH_MULTIPLE_WORDS_DELIMITER = "+"
 _TRANSLATIONS_DIR = importlib.resources.files(_translations)
+_EMPHASIS_START = "\x1b[1m"
+_EMPHASIS_END = "\x1b[0m"
 
 
 class BibleNotFound(AssertionError):
@@ -57,7 +59,7 @@ class Bible(metaclass=BibleMeta):
             raise BibleNotFound(self.version) from e
 
     def __repr__(self):
-        return self.colored(self.version)
+        return self.emphasis(self.colored(self.version))
 
     def __hash__(self):
         return hash(self.version)
@@ -73,6 +75,9 @@ class Bible(metaclass=BibleMeta):
             return "{}{}{}".format(self.color, value, _COLOR_END)
         else:
             return value
+
+    def emphasis(self, value):
+        return f"{_EMPHASIS_START}{value}{_EMPHASIS_END}"
 
     def book(self, name):
         return [
